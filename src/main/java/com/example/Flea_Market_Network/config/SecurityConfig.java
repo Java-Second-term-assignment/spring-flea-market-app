@@ -27,9 +27,10 @@ import com.example.Flea_Market_Network.repository.UserRepository;
 @EnableWebSecurity
 @EnableMethodSecurity(prePostEnabled = true)
 public class SecurityConfig {
+
 	//セキュリティの主要設定（エンドポイント保護 / 認証 / ログアウト / CSRF 例外）
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		//HttpSecurity ビルダーに対して設定を積み上げる
 		http
 				//認可ルールの設定
@@ -72,8 +73,7 @@ public class SecurityConfig {
 	}
 
 	//DB からユーザをロードして Spring Security の UserDetails に変換する
-	@Bean
-	public UserDetailsService userDetailsService(UserRepository userRepository) {
+	UserDetailsService userDetailsService(UserRepository userRepository) {
 		//email（=username）で検索し、見つかれば UserDetails を組み立てる
 		return email -> userRepository.findByEmail(email)
 				//Map でアプリの User を Spring の User に詰め替える
@@ -94,7 +94,7 @@ public class SecurityConfig {
 
 	//安全なパスワードハッシュ用エンコーダ（BCrypt）を提供
 	@Bean
-	public PasswordEncoder passwordEncoder() {
+	PasswordEncoder passwordEncoder() {
 		//10 程度のストレングスがデフォルトで実用十分
 		return new BCryptPasswordEncoder();
 	}

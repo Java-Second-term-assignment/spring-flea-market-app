@@ -68,9 +68,9 @@ public class AdminController {
 
 	// 管理者による商品削除
 	@PostMapping("/items/{id}/delete")
-	public String deleteItemByAdmin(@PathVariable("id") Long itemId) {
+	public String deleteItemByAdmin(@PathVariable Long id) {
 		// 商品 ID を指定して削除
-		itemService.deleteItem(itemId);
+		itemService.deleteItem(id);
 		// 削除成功のクエリパラメタ付きで一覧へ
 		return "redirect:/admin/items?success=deleted";
 	}
@@ -86,9 +86,9 @@ public class AdminController {
 
 	// ユーザの有効/無効をトグル
 	@PostMapping("/users/{id}/toggle-enabled")
-	public String toggleUserEnabled(@PathVariable("id") Long userId) {
+	public String toggleUserEnabled(@PathVariable Long id) {
 		// サービスで有効フラグを反転
-		userService.toggleUserEnabled(userId);
+		userService.toggleUserEnabled(id);
 		// 成功パラメタを付けて戻る
 		return "redirect:/admin/users?success=toggled";
 	}

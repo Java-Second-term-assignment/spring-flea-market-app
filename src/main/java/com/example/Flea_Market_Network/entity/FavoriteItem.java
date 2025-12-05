@@ -13,8 +13,6 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-
 // Lombok でメソッド自動生成
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -45,7 +43,9 @@ public class FavoriteItem {
 	@ManyToOne
 	@JoinColumn(name = "item_id", nullable = false)
 
+	// Item は com.example.Flea_Market_Network.entity.Item を参照します
 	private Item item;
+
 	// お気に入り登録日時。既定で現在時刻
 	@Column(name = "created_at", nullable = false)
 	private LocalDateTime createdAt = LocalDateTime.now();

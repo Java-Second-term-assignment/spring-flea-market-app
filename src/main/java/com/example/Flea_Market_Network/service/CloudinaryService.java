@@ -39,13 +39,15 @@ public class CloudinaryService {
 	}
 
 	//画像をアップロードして公開 URL を返す（空ファイルは null）
+	@SuppressWarnings("unchecked")
 	public String uploadFile(MultipartFile file) throws IOException {
 		//アップロードなしのケースは null を返す
 		if (file.isEmpty()) {
 			return null;
 		}
 		//バイト配列をそのままアップロード（オプションは既定）
-		Map uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
+		// Cloudinary SDK の戻り値の型が Raw Map のため、代入時に警告が発生します
+		Map<String, Object> uploadResult = cloudinary.uploader().upload(file.getBytes(), ObjectUtils.emptyMap());
 		//返却 Map から公開 URL を取り出して返す
 		return uploadResult.get("url").toString();
 	}

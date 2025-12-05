@@ -13,7 +13,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
+// 【削除された行】: import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
 
 // Lombok でボイラープレート削減
 import lombok.AllArgsConstructor;
@@ -39,6 +39,7 @@ public class Chat {
 	// 対象商品の参照（外部キー item_id）。NULL 禁止
 	@ManyToOne
 	@JoinColumn(name = "item_id", nullable = false)
+	// Item は com.example.Flea_Market_Network.entity.Item を参照します
 	private Item item;
 	// 送信者ユーザーの参照（外部キー sender_id）。NULL 禁止
 	@ManyToOne

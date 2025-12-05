@@ -5,8 +5,6 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
 //JPA アノテーションの import
-//JPA アノテーションの import
-// JPA アノテーションの import
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -16,12 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
 
-import org.hibernate.cache.spi.support.AbstractReadWriteAccess.Item;
-
-//Lombok でゲッター/セッター等を自動生成
+// Lombok でゲッター/セッター等を自動生成
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+
+// ※ AppOrder が Item エンティティと同じパッケージにあるため、Item のインポートは不要です。
+// もし Item が別のパッケージにある場合は、その正しいパッケージ名でインポートしてください。
+// 例: import com.example.Flea_Market_Network.entity.Item;
 
 @Entity
 // テーブル名を明示
@@ -34,7 +34,9 @@ public class AppOrder {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
+
 	// 注文が紐づく商品（必須）
+	// Item クラスは、このパッケージ（com.example.Flea_Market_Network.entity）内で定義されている前提
 	@ManyToOne
 	@JoinColumn(name = "item_id", nullable = false)
 	private Item item;
@@ -47,16 +49,16 @@ public class AppOrder {
 	// 決済金額のスナップショット（必須）
 	@Column(nullable = false)
 	private BigDecimal price;
+
 	// 注文状態（購入済/発送済/決済待ち 等）
 	@Column(nullable = false)
 	private String status = "購入済";
 
 	// Stripe の PaymentIntent ID を保持（決済と注文を 1 対 1 で特定）
 	@Column(name = "payment_intent_id", unique = true)
-
 	private String paymentIntentId;
+
 	//作成日時（集計用）
 	@Column(name = "created_at", nullable = false)
-
 	private LocalDateTime createdAt = LocalDateTime.now();
 }

@@ -50,6 +50,13 @@ public class ItemService {
 	public Page<Item> searchItems(String keyword, Long categoryId, int page, int size) {
 		//ページング指定を生成
 		Pageable pageable = PageRequest.of(page, size);
+
+		// CategoryService を利用して、指定されたカテゴリIDが存在するかチェックする
+		if (categoryId != null && !categoryService.isCategoryExist(categoryId)) {
+			// カテゴリIDが存在しない場合、検索結果は空になるべき
+			return Page.empty(pageable);
+		}
+
 		//キーワードとカテゴリ両方指定時の検索
 		if (keyword != null && !keyword.isEmpty() && categoryId != null) {
 			//名前 LIKE×カテゴリ×出品中で検索

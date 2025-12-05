@@ -2,6 +2,7 @@ package com.example.Flea_Market_Network.repository;
 
 //コレクションや Optional 用
 import java.util.List;
+import java.util.Optional;
 
 //Spring Data JPA の import
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -12,6 +13,10 @@ import com.example.Flea_Market_Network.entity.User;
 
 @Repository
 public interface AppOrderRepository extends JpaRepository<AppOrder, Long> {
+	Optional<AppOrder> findByPaymentIntentId(String paymentIntentId);
+
+	Optional<AppOrder> findById(Long id);
+
 	//買い手で注文一覧を取得
 	List<AppOrder> findByBuyer(User buyer);
 

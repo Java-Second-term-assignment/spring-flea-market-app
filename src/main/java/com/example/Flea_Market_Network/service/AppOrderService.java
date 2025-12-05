@@ -53,8 +53,11 @@ public class AppOrderService {
 		if (!"出品中".equals(item.getStatus())) {
 			throw new IllegalStateException("Item is not available for purchase.");
 		}
-		//Stripeへ PaymentIntent 作成（JPY は最小単位が 1 円のため create 側で考慮）
-		PaymentIntent paymentIntent = stripeService.createPaymentIntent(item.getPrice(), "購入: " + item.getName());
+
+		// Stripeへ PaymentIntent 作成（JPY は最小単位が 1 円のため create 側で考慮）
+		PaymentIntent paymentIntent = stripeService.createPaymentIntent(item.getPrice(), "購入: " + item.getName(),
+				"jpy");
+
 		//注文を“決済待ち”で作成し、PaymentIntent ID を確実に保存
 		AppOrder appOrder = new AppOrder();
 		//商品を紐付け

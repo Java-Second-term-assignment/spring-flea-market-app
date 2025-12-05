@@ -1,57 +1,61 @@
 package com.example.Flea_Market_Network.service;
 
-//一覧返却に使う List を import
+//コレクション操作のための import
 import java.util.List;
-//Optional を返すために import
+//Optional の import
 import java.util.Optional;
 
-//DI 対象サービスを示すアノテーションを import
+//サービスアノテーションの import
 import org.springframework.stereotype.Service;
 
-//カテゴリエンティティを扱うための import
+//カテゴリエンティティの import
 import com.example.Flea_Market_Network.entity.Category;
-//リポジトリ IF を import
+//カテゴリ用リポジトリの import
 import com.example.Flea_Market_Network.repository.CategoryRepository;
 
-//サービス層として登録
+//サービス層としての宣言
 @Service
 public class CategoryService {
-	//カテゴリリポジトリの参照
+	//リポジトリの参照
 	private final CategoryRepository categoryRepository;
 
 	//依存性をコンストラクタで注入
 	public CategoryService(CategoryRepository categoryRepository) {
-		//フィールドへ設定
+		//カテゴリリポジトリを設定
 		this.categoryRepository = categoryRepository;
 	}
 
-	//すべてのカテゴリを取得
+	//全カテゴリ一覧を返す
 	public List<Category> getAllCategories() {
-		//全件取得を委譲
 		return categoryRepository.findAll();
 	}
 
-	//主キーでカテゴリを取得
+	//ID でカテゴリを取得
 	public Optional<Category> getCategoryById(Long id) {
-		//Optional をそのまま返す
 		return categoryRepository.findById(id);
 	}
 
-	//名称でカテゴリを取得（名称は一意前提）
-	public Optional<Category> getCategoryByName(String name) {
-		//名称検索を委譲
-		return categoryRepository.findByName(name);
-	}
-
-	//新規/更新保存
+	//カテゴリを保存/更新
 	public Category saveCategory(Category category) {
-		//save に委譲
+		//カテゴリ名が一意であることを確認
+		if (categoryRepository.findByName(category.getName()).isPresent() &&
+				(category.getId() == null
+						|| !categoryRepository.findByName(category.getName()).get().getId().equals(category.getId()))) {
+			throw new IllegalArgumentException("Category name already exists.");
+		}
 		return categoryRepository.save(category);
 	}
 
-	//削除
+	//カテゴリを削除
 	public void deleteCategory(Long id) {
-		//ID 指定で削除
 		categoryRepository.deleteById(id);
+	}
+
+	public boolean isCategoryExist(Long categoryId) {
+		// categoryId が null でなければ、リポジトリに存在確認を委譲する
+		if (categoryId == null) {
+			return false;
+		}
+		return categoryRepository.existsById(categoryId);
 	}
 }

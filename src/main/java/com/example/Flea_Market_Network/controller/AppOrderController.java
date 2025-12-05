@@ -89,6 +89,14 @@ public class AppOrderController {
 		if (clientSecret == null || itemId == null) {
 			return "redirect:/items";
 		}
+
+		// ItemService を使用して商品情報を取得し、Modelに追加
+		itemService.getItemById(itemId).ifPresentOrElse(
+				item -> model.addAttribute("item", item),
+				() -> {
+					throw new IllegalArgumentException("Item not found for payment confirmation.");
+				});
+
 		// テンプレートに値を積む
 		model.addAttribute("clientSecret", clientSecret);
 		model.addAttribute("itemId", itemId);
