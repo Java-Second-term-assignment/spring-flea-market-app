@@ -19,6 +19,8 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 //セキュリティフィルタチェーンの型
 import org.springframework.security.web.SecurityFilterChain;
+//HTTP クライアントとして RestTemplate を import
+import org.springframework.web.client.RestTemplate;
 
 //UserRepository を使ってユーザを読み出すための import
 import com.example.Flea_Market_Network.repository.UserRepository;
@@ -35,8 +37,9 @@ public class SecurityConfig {
 		http
 				//認可ルールの設定
 				.authorizeHttpRequests(authorize -> authorize
-						//ログイン画面や静的ファイル、商品一覧・詳細は匿名アクセス許可
-						.requestMatchers("/login",
+						//ルートパス、ログイン画面や静的ファイル、商品一覧・詳細は匿名アクセス許可
+						.requestMatchers("/",
+								"/login",
 								"/css/**",
 								"/js/**",
 								"/images/**",
@@ -97,5 +100,11 @@ public class SecurityConfig {
 	PasswordEncoder passwordEncoder() {
 		//10 程度のストレングスがデフォルトで実用十分
 		return new BCryptPasswordEncoder();
+	}
+
+	//HTTP クライアント（RestTemplate）を提供（LINE Notify などで使用）
+	@Bean
+	RestTemplate restTemplate() {
+		return new RestTemplate();
 	}
 }
